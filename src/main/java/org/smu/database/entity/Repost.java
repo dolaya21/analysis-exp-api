@@ -8,24 +8,26 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@IdClass(RepostId.class)
+@Table(name = "Repost")
 public class Repost {
-    @Id
+
+    @EmbeddedId
+    private RepostId id;
+
     @ManyToOne
+    @MapsId("socialMedia")
     @JoinColumn(name = "social_media")
-    private SocialMedia socialMedia;
+    private SocialMedia socialMediaEntity;
 
-    @Id
     @ManyToOne
+    @MapsId("user")
     @JoinColumn(name = "user")
-    private User user;
-
-    @Id
-    private LocalDateTime time;
+    private User userEntity;
 
     @ManyToOne
     @JoinColumn(name = "repost_username")
-    private User repostUsername;
+    private User repostUserEntity;
 
+    @Column(name = "repost_time")
     private LocalDateTime repostTime;
 }
