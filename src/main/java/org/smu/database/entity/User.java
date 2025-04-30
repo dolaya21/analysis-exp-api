@@ -8,9 +8,12 @@ import lombok.Data;
 @Table(name = "User")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
-
     private String username;
-    private String email;
+    private String firstName;
+    private String lastName;
+    private String countryOfBirth;
+    private String countryOfResidence;
+    private Integer age;
+    private String gender;
+    private Boolean verified;
 }

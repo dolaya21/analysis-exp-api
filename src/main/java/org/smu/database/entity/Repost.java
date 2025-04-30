@@ -1,26 +1,31 @@
 package org.smu.database.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
+import org.smu.database.key.RepostId;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
+@IdClass(RepostId.class)
 public class Repost {
     @Id
-    private Integer repost_id;
-
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
-
-    @ManyToOne
-    @JoinColumn(name = "smID")
+    @JoinColumn(name = "social_media")
     private SocialMedia socialMedia;
 
-    private Date repost_time;
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "user")
+    private User user;
+
+    @Id
+    private LocalDateTime time;
+
+    @ManyToOne
+    @JoinColumn(name = "repost_username")
+    private User repostUsername;
+
+    private LocalDateTime repostTime;
 }

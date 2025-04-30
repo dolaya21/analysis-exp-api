@@ -10,9 +10,7 @@ import lombok.Data;
 @Entity
 public class ProjectManager {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer managerID;
-
-    private String name;
-    private String email;
+    private Integer employeeId;
+    private String firstName;
+    private String lastName;
 }

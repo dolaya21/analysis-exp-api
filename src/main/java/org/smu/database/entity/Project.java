@@ -4,20 +4,19 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Data
 @Entity
 public class Project {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer projectID;
-
     private String projectName;
-    private String description;
-    private Date startDate;
-    private Date endDate;
 
     @ManyToOne
-    @JoinColumn(name = "managerID")
-    private ProjectManager managerID;
+    @JoinColumn(name = "project_manager_employee_id")
+    private ProjectManager projectManager;
+
+    private String instituteName;
+    private LocalDate startDate;
+    private LocalDate endDate;
 }

@@ -17,4 +17,9 @@ public class PostController {
     public void getUserById(@PathVariable Long id) {
         System.out.println(id);
     }
+
+    @GetMapping("/socailmedia/{socailmedianame}")
+    public void getPostBySociaMedia(@PathVariable String socailmedianame) {
+        System.out.println(socailmedianame);
+    }
 }

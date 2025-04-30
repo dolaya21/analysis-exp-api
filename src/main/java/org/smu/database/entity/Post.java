@@ -4,22 +4,25 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer postID;
+    private Integer postId;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "smID")
+    @JoinColumn(name = "social_media")
     private SocialMedia socialMedia;
 
-    private String content;
-    private Date postDate;
+    @ManyToOne
+    @JoinColumn(name = "username")
+    private User user;
+
+    private LocalDateTime time;
+    private String text;
+    private String location;
+    private Integer numberOfLikes;
+    private Boolean containsMultimedia;
 }
