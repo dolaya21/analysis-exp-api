@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
+@Table
 public class Post {
     @Id
     private Integer postId;

@@ -1,25 +1,23 @@
 package org.smu.controller;
 
+import org.smu.database.entity.Post;
+import org.smu.database.repository.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/posts")
 public class PostController {
-    @GetMapping("/social-media/{id}")
-    public void getUserById(@PathVariable String id) {
-        System.out.println(id);
-    }
+    @Autowired
+    private PostRepository repository;
 
-    @GetMapping("/{id}")
-    public void getUserById(@PathVariable Long id) {
-        System.out.println(id);
-    }
-
-    @GetMapping("/socailmedia/{socailmedianame}")
-    public void getPostBySociaMedia(@PathVariable String socailmedianame) {
-        System.out.println(socailmedianame);
+    @GetMapping("/by-social-media/{name}")
+    public List<Post> getPostsBySocialMedia(@PathVariable String name) {
+        return repository.findBySocialMedia_Name(name);
     }
 }
