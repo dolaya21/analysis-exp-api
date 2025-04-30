@@ -12,4 +12,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findBySocialMedia_Name(String socialMediaName);
 
     List<Post> findByTimeBetween(LocalDateTime start, LocalDateTime end);
+
+    List<Post> findByUser_UsernameAndSocialMedia_Name(String username, String socialMedia);
+
+    List<Post> findByUser_FirstNameIgnoreCaseOrUser_LastNameIgnoreCase(String firstName, String lastName);
 }

@@ -1,0 +1,120 @@
+{
+	"info": {
+		"_postman_id": "c4f57b26-b56e-4c75-9ace-0fb5b1a893fe",
+		"name": "analysis-requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33660068"
+	},
+	"item": [
+		{
+			"name": "Find Posts By Social Media",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/cards/cards",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"cards",
+						"cards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Post Between Dates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/posts/between?start=2025-04-01T00:00:00&end=2025-04-30T23:59:59",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posts",
+						"between"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2025-04-01T00:00:00"
+						},
+						{
+							"key": "end",
+							"value": "2025-04-30T23:59:59"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Posts By User and Social Media",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/posts/by-user-and-media?username=john_doe&media=Twitter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posts",
+						"by-user-and-media"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "john_doe"
+						},
+						{
+							"key": "media",
+							"value": "Twitter"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Posts By First/Last Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/posts/by-name?name=Doe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posts",
+						"by-name"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Doe"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -10,7 +10,10 @@ import java.util.List;
 public interface RepostRepository extends JpaRepository<Repost, RepostId> {
     List<Repost> findBySocialMediaEntity_Name(String name);
 
-
     List<Repost> findById_TimeBetween(LocalDateTime start, LocalDateTime end);
+
+    List<Repost> findByUserEntity_UsernameAndSocialMediaEntity_Name(String username, String socialMedia);
+
+    List<Repost> findByUserEntity_FirstNameIgnoreCaseOrUserEntity_LastNameIgnoreCase(String firstName, String lastName);
 }
 

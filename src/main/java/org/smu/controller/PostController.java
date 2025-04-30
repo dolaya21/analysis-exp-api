@@ -41,6 +41,29 @@ public class PostController {
         return results;
     }
 
+    @GetMapping("/by-user-and-media")
+    public List<PostResponseDTO> getPostsByUserAndMedia(
+            @RequestParam("username") String username,
+            @RequestParam("media") String media
+    ) {
+        List<PostResponseDTO> results = new ArrayList<>();
+        results.addAll(mapPostsToDTOs(postRepository.findByUser_UsernameAndSocialMedia_Name(username, media)));
+        results.addAll(mapRepostsToDTOs(repostRepository.findByUserEntity_UsernameAndSocialMediaEntity_Name(username, media)));
+        return results;
+    }
+
+    @GetMapping("/by-name")
+    public List<PostResponseDTO> getPostsByName(@RequestParam("name") String name) {
+        List<PostResponseDTO> results = new ArrayList<>();
+        results.addAll(mapPostsToDTOs(
+                postRepository.findByUser_FirstNameIgnoreCaseOrUser_LastNameIgnoreCase(name, name))
+        );
+        results.addAll(mapRepostsToDTOs(
+                repostRepository.findByUserEntity_FirstNameIgnoreCaseOrUserEntity_LastNameIgnoreCase(name, name))
+        );
+        return results;
+    }
+
     private List<PostResponseDTO> mapPostsToDTOs(List<Post> posts) {
         List<PostResponseDTO> dtos = new ArrayList<>();
         for (Post p : posts) {
@@ -58,7 +81,7 @@ public class PostController {
         }
         return dtos;
     }
-    
+
     private List<PostResponseDTO> mapRepostsToDTOs(List<Repost> reposts) {
         List<PostResponseDTO> dtos = new ArrayList<>();
         for (Repost r : reposts) {
