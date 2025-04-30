@@ -25,37 +25,8 @@ public class PostController {
     @GetMapping("/by-social-media/{name}")
     public List<PostResponseDTO> getPostsBySocialMedia(@PathVariable String name) {
         List<PostResponseDTO> results = new ArrayList<>();
-
-        // Fetch original posts
-        List<Post> posts = postRepository.findBySocialMedia_Name(name);
-        for (Post p : posts) {
-            PostResponseDTO dto = new PostResponseDTO();
-            dto.setPostId(p.getPostId());
-            dto.setSocialMedia(p.getSocialMedia().getName());
-            dto.setUsername(p.getUser().getUsername());
-            dto.setText(p.getText());
-            dto.setLocation(p.getLocation());
-            dto.setNumberOfLikes(p.getNumberOfLikes());
-            dto.setContainsMultimedia(p.getContainsMultimedia());
-            dto.setTime(p.getTime());
-            dto.setRepost(false);
-            results.add(dto);
-        }
-
-        // Fetch reposts
-        List<Repost> reposts = repostRepository.findBySocialMediaEntity_Name(name);
-        for (Repost r : reposts) {
-            PostResponseDTO dto = new PostResponseDTO();
-            dto.setPostId(null); // Reposts don't have Post_ID
-            dto.setSocialMedia(r.getSocialMediaEntity().getName());
-            dto.setUsername(r.getUserEntity().getUsername());
-            dto.setTime(r.getId().getTime());
-            dto.setRepost(true);
-            dto.setOriginalUsername(r.getRepostUserEntity().getUsername());
-            dto.setOriginalTime(r.getRepostTime());
-            results.add(dto);
-        }
-
+        results.addAll(mapPostsToDTOs(postRepository.findBySocialMedia_Name(name)));
+        results.addAll(mapRepostsToDTOs(repostRepository.findBySocialMediaEntity_Name(name)));
         return results;
     }
 
@@ -65,8 +36,13 @@ public class PostController {
             @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end
     ) {
         List<PostResponseDTO> results = new ArrayList<>();
+        results.addAll(mapPostsToDTOs(postRepository.findByTimeBetween(start, end)));
+        results.addAll(mapRepostsToDTOs(repostRepository.findById_TimeBetween(start, end)));
+        return results;
+    }
 
-        List<Post> posts = postRepository.findByTimeBetween(start, end);
+    private List<PostResponseDTO> mapPostsToDTOs(List<Post> posts) {
+        List<PostResponseDTO> dtos = new ArrayList<>();
         for (Post p : posts) {
             PostResponseDTO dto = new PostResponseDTO();
             dto.setPostId(p.getPostId());
@@ -78,10 +54,13 @@ public class PostController {
             dto.setContainsMultimedia(p.getContainsMultimedia());
             dto.setTime(p.getTime());
             dto.setRepost(false);
-            results.add(dto);
+            dtos.add(dto);
         }
-
-        List<Repost> reposts = repostRepository.findById_TimeBetween(start, end);
+        return dtos;
+    }
+    
+    private List<PostResponseDTO> mapRepostsToDTOs(List<Repost> reposts) {
+        List<PostResponseDTO> dtos = new ArrayList<>();
         for (Repost r : reposts) {
             PostResponseDTO dto = new PostResponseDTO();
             dto.setPostId(null);
@@ -91,9 +70,8 @@ public class PostController {
             dto.setRepost(true);
             dto.setOriginalUsername(r.getRepostUserEntity().getUsername());
             dto.setOriginalTime(r.getRepostTime());
-            results.add(dto);
+            dtos.add(dto);
         }
-
-        return results;
+        return dtos;
     }
 }
