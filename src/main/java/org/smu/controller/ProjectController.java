@@ -5,7 +5,6 @@ import org.smu.database.repository.*;
 import org.smu.dto.PostDTO;
 import org.smu.dto.ProjectPostLinkDTO;
 import org.smu.dto.ProjectRequestDTO;
-import org.smu.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,7 +59,7 @@ public class ProjectController {
         if (projectOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Project not found");
         }
-        
+
         List<Post> savedPosts = new ArrayList<>();
 
         for (PostDTO postDto : request.getPosts()) {
