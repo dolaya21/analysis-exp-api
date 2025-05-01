@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
 
 import java.util.List;
-
+import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
@@ -16,4 +16,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findByUser_UsernameAndSocialMedia_Name(String username, String socialMedia);
 
     List<Post> findByUser_FirstNameIgnoreCaseOrUser_LastNameIgnoreCase(String firstName, String lastName);
+
+    Optional<Post> findByPostId(Integer postId);
 }

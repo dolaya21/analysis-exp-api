@@ -115,6 +115,94 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Add Project Manager",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"employeeId\": 101,\n  \"firstName\": \"Alice\",\n  \"lastName\": \"Johnson\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/project-managers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"project-managers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Project",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"projectName\": \"Social Analysis 2025\",\n  \"projectManagerEmployeeId\": 101,\n  \"instituteName\": \"SMU AI Lab\",\n  \"startDate\": \"2025-05-01\",\n  \"endDate\": \"2025-08-30\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/projects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Posts To Project",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"projectName\": \"Social Analysis 2025\",\n  \"posts\": [\n    {\n      \"postId\": 1,\n      \"socialMedia\": \"Twitter\",\n      \"username\": \"john_doe\",\n      \"text\": \"Excited about this project!\",\n      \"location\": \"Dallas, TX\",\n      \"time\": \"2025-04-29T15:00:00\",\n      \"numberOfLikes\": 100,\n      \"containsMultimedia\": true\n    },\n    {\n      \"postId\": 2,\n      \"socialMedia\": \"Instagram\",\n      \"username\": \"jane_doe\",\n      \"text\": \"Launching today 🚀\",\n      \"location\": \"New York, NY\",\n      \"time\": \"2025-04-29T18:45:00\",\n      \"numberOfLikes\": 250,\n      \"containsMultimedia\": false\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/projects/add-posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"projects",
+						"add-posts"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
