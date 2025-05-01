@@ -3,5 +3,5 @@ package org.smu.database.repository;
 import org.smu.database.entity.ProjectManager;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-interface ProjectManagerRepository extends JpaRepository<ProjectManager, Integer> {}
+public interface ProjectManagerRepository extends JpaRepository<ProjectManager, Integer> {}
 
