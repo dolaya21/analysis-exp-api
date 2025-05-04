@@ -247,6 +247,33 @@
 			"response": []
 		},
 		{
+			"name": "Find Posts for Analysis Result Project Names Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/projects/analysis-results?projectName=Social Analysis 2025",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"projects",
+						"analysis-results"
+					],
+					"query": [
+						{
+							"key": "projectName",
+							"value": "Social Analysis 2025"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Add Project Manager",
 			"request": {
 				"method": "POST",
