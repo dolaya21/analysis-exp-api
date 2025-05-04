@@ -3,10 +3,11 @@ package org.smu.dto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class PostResponseDTO {
-    private Integer postId; // null for reposts
+    private Integer postId;
     private String socialMedia;
     private String username;
     private String text;
@@ -17,4 +18,5 @@ public class PostResponseDTO {
     private boolean isRepost;
     private String originalUsername;
     private LocalDateTime originalTime;
+    private List<AnalysisResultDTO> analysisResults;
 }

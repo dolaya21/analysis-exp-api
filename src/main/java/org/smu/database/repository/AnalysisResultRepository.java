@@ -14,4 +14,11 @@ public interface AnalysisResultRepository extends JpaRepository<AnalysisResult, 
         WHERE ar.project.projectName = :projectName
     """)
     List<AnalysisResult> findByProjectName(String projectName);
+
+    @Query("""
+    SELECT ar FROM AnalysisResult ar
+    JOIN FETCH ar.analysisCategory ac
+    WHERE ar.post.postId = :postId
+""")
+    List<AnalysisResult> findByPostId(Integer postId);
 }

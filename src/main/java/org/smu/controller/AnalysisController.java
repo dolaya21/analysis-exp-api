@@ -8,7 +8,7 @@ import org.smu.database.repository.AnalysisCategoryRepository;
 import org.smu.database.repository.AnalysisResultRepository;
 import org.smu.database.repository.PostRepository;
 import org.smu.database.repository.ProjectRepository;
-import org.smu.dto.AnalysisRequestDTO;
+import org.smu.dto.AnalysisResultDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +29,7 @@ public class AnalysisController {
     @Autowired private AnalysisResultRepository resultRepository;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addAnalysis(@RequestBody AnalysisRequestDTO request) {
+    public ResponseEntity<?> addAnalysis(@RequestBody AnalysisResultDTO request) {
         Optional<Post> postOpt = postRepository.findById(request.getPostId());
         Optional<Project> projectOpt = projectRepository.findById(request.getProjectName());
 

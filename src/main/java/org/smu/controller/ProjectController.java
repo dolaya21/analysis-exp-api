@@ -2,7 +2,7 @@ package org.smu.controller;
 
 import org.smu.database.entity.*;
 import org.smu.database.repository.*;
-import org.smu.dto.AnalysisRequestDTO;
+import org.smu.dto.AnalysisResultDTO;
 import org.smu.dto.PostDTO;
 import org.smu.dto.ProjectPostLinkDTO;
 import org.smu.dto.ProjectRequestDTO;
@@ -81,7 +81,7 @@ public class ProjectController {
                 post.setPostId(postDto.getPostId());
                 post.setUser(userOpt.get());
                 post.setSocialMedia(smOpt.get());
-                post.setTime(postDto.getTime());
+                post.setTime(postDto.getOriginalTime());
                 post.setText(postDto.getText());
                 post.setLocation(postDto.getLocation());
                 post.setNumberOfLikes(postDto.getNumberOfLikes());
@@ -100,8 +100,8 @@ public class ProjectController {
     public ResponseEntity<?> getAnalysisResultsByProjectName(@RequestParam String projectName) {
         List<AnalysisResult> results = analysisResultRepository.findByProjectName(projectName);
 
-        List<AnalysisRequestDTO> dtos = results.stream().map(ar -> {
-            AnalysisRequestDTO dto = new AnalysisRequestDTO();
+        List<AnalysisResultDTO> dtos = results.stream().map(ar -> {
+            AnalysisResultDTO dto = new AnalysisResultDTO();
             dto.setPostId(ar.getPost().getPostId());
             dto.setProjectName(ar.getProject().getProjectName());
             dto.setCategoryName(ar.getAnalysisCategory().getCategoryName());
