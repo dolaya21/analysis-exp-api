@@ -37,13 +37,11 @@ public class AnalysisController {
             return ResponseEntity.badRequest().body("Post or Project not found.");
         }
 
-        // Step 1: Create AnalysisCategory
         AnalysisCategory category = new AnalysisCategory();
         category.setCategoryName(request.getCategoryName());
         category.setCategoryResult(request.getCategoryResult());
         category = categoryRepository.save(category);
 
-        // Step 2: Create AnalysisResult
         AnalysisResult result = new AnalysisResult();
         result.setPostId(postOpt.get().getPostId()); // <-- set ID field
         result.setProjectName(projectOpt.get().getProjectName()); // <-- set ID field

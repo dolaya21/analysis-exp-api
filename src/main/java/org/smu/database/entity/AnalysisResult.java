@@ -11,15 +11,15 @@ import org.smu.database.key.AnalysisResultId;
 public class AnalysisResult {
 
     @Id
-    @Column(name = "Post_ID") // match DB
+    @Column(name = "Post_ID")
     private Integer postId;
 
     @Id
-    @Column(name = "Project_Name") // match DB
+    @Column(name = "Project_Name")
     private String projectName;
 
     @Id
-    @Column(name = "AnalysisCategory_ID") // match DB
+    @Column(name = "AnalysisCategory_ID")
     private Integer analysisCategoryId;
 
     @ManyToOne

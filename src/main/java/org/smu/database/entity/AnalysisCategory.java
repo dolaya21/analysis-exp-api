@@ -10,7 +10,7 @@ public class AnalysisCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "AnalysisCategory_ID") // Must match DB exactly
+    @Column(name = "AnalysisCategory_ID")
     private Integer analysisCategoryId;
 
     @Column(name = "Category_Name")

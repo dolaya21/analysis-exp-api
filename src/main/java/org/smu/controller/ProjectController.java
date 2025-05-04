@@ -2,15 +2,13 @@ package org.smu.controller;
 
 import org.smu.database.entity.*;
 import org.smu.database.repository.*;
+import org.smu.dto.AnalysisRequestDTO;
 import org.smu.dto.PostDTO;
 import org.smu.dto.ProjectPostLinkDTO;
 import org.smu.dto.ProjectRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +32,9 @@ public class ProjectController {
 
     @Autowired
     private SocialMediaRepository socialMediaRepository;
+
+    @Autowired
+    private AnalysisResultRepository analysisResultRepository;
 
     @PostMapping
     public ResponseEntity<?> createProject(@RequestBody ProjectRequestDTO request) {
@@ -93,5 +94,21 @@ public class ProjectController {
         }
 
         return ResponseEntity.ok("Posts linked to project successfully.");
+    }
+
+    @GetMapping("/analysis-results")
+    public ResponseEntity<?> getAnalysisResultsByProjectName(@RequestParam String projectName) {
+        List<AnalysisResult> results = analysisResultRepository.findByProjectName(projectName);
+
+        List<AnalysisRequestDTO> dtos = results.stream().map(ar -> {
+            AnalysisRequestDTO dto = new AnalysisRequestDTO();
+            dto.setPostId(ar.getPost().getPostId());
+            dto.setProjectName(ar.getProject().getProjectName());
+            dto.setCategoryName(ar.getAnalysisCategory().getCategoryName());
+            dto.setCategoryResult(ar.getAnalysisCategory().getCategoryResult());
+            return dto;
+        }).toList();
+
+        return ResponseEntity.ok(dtos);
     }
 }

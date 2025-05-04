@@ -3,7 +3,6 @@ package org.smu.database.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Data
