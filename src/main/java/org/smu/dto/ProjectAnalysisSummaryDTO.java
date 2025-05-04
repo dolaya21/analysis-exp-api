@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class ProjectAnalysisSummaryDTO {
     private List<PostWithResultsDTO> posts;
-    private List<CategorySummaryDTO> categorySummaries;
+    private List<AnalysisCategorySummaryDTO> categorySummaries;
 }

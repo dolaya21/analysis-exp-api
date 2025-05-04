@@ -148,7 +148,6 @@ public class ProjectController {
             postDTOs.add(dto);
         }
 
-        // Compute category summary
         int totalPosts = groupedByPost.size();
         Map<String, Long> countByCategory = results.stream()
                 .filter(ar -> ar.getAnalysisCategory().getCategoryResult() != null)
@@ -158,8 +157,8 @@ public class ProjectController {
                 )).entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> (long) e.getValue().size()));
 
-        List<CategorySummaryDTO> categorySummaries = countByCategory.entrySet().stream().map(e -> {
-            CategorySummaryDTO cs = new CategorySummaryDTO();
+        List<AnalysisCategorySummaryDTO> categorySummaries = countByCategory.entrySet().stream().map(e -> {
+            AnalysisCategorySummaryDTO cs = new AnalysisCategorySummaryDTO();
             cs.setCategoryName(e.getKey());
             cs.setPercentageOfPostsWithResult((e.getValue() * 100.0) / totalPosts);
             return cs;

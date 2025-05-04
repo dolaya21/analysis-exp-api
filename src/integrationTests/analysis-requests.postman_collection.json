@@ -151,6 +151,48 @@
 			"response": []
 		},
 		{
+			"name": "Find Projects with Post Ids",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"postIds\": [1, 2]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/posts/project-summary-by-posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posts",
+						"project-summary-by-posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Find All Project Names for a Project Manager",
 			"request": {
 				"method": "GET",
