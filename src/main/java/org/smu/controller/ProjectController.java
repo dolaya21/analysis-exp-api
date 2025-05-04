@@ -2,17 +2,16 @@ package org.smu.controller;
 
 import org.smu.database.entity.*;
 import org.smu.database.repository.*;
-import org.smu.dto.AnalysisResultDTO;
-import org.smu.dto.PostDTO;
-import org.smu.dto.ProjectPostLinkDTO;
-import org.smu.dto.ProjectRequestDTO;
+import org.smu.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -110,5 +109,67 @@ public class ProjectController {
         }).toList();
 
         return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/{projectName}/analysis-summary")
+    public ResponseEntity<?> getProjectAnalysisSummary(@PathVariable String projectName) {
+        Optional<Project> projectOpt = projectRepository.findById(projectName);
+        if (projectOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Project not found");
+        }
+
+        Project project = projectOpt.get();
+        List<AnalysisResult> results = analysisResultRepository.findByProjectName(projectName);
+
+        Map<Integer, List<AnalysisResult>> groupedByPost = results.stream()
+                .collect(Collectors.groupingBy(r -> r.getPost().getPostId()));
+
+        List<PostWithResultsDTO> postDTOs = new ArrayList<>();
+        for (Map.Entry<Integer, List<AnalysisResult>> entry : groupedByPost.entrySet()) {
+            Post post = entry.getValue().get(0).getPost();
+
+            PostWithResultsDTO dto = new PostWithResultsDTO();
+            dto.setPostId(post.getPostId());
+            dto.setUsername(post.getUser().getUsername());
+            dto.setText(post.getText());
+            dto.setLocation(post.getLocation());
+            dto.setSocialMedia(post.getSocialMedia().getName());
+            dto.setTime(post.getTime());
+
+            List<AnalysisResultDTO> arDTOs = entry.getValue().stream().map(ar -> {
+                AnalysisResultDTO ardto = new AnalysisResultDTO();
+                ardto.setCategoryName(ar.getAnalysisCategory().getCategoryName());
+                ardto.setCategoryResult(ar.getAnalysisCategory().getCategoryResult());
+                ardto.setProjectName(projectName);
+                return ardto;
+            }).toList();
+
+            dto.setAnalysisResults(arDTOs);
+            postDTOs.add(dto);
+        }
+
+        // Compute category summary
+        int totalPosts = groupedByPost.size();
+        Map<String, Long> countByCategory = results.stream()
+                .filter(ar -> ar.getAnalysisCategory().getCategoryResult() != null)
+                .collect(Collectors.groupingBy(
+                        ar -> ar.getAnalysisCategory().getCategoryName(),
+                        Collectors.mapping(ar -> ar.getPost().getPostId(), Collectors.toSet())
+                )).entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> (long) e.getValue().size()));
+
+        List<CategorySummaryDTO> categorySummaries = countByCategory.entrySet().stream().map(e -> {
+            CategorySummaryDTO cs = new CategorySummaryDTO();
+            cs.setCategoryName(e.getKey());
+            cs.setPercentageOfPostsWithResult((e.getValue() * 100.0) / totalPosts);
+            return cs;
+        }).toList();
+
+        // Final wrapper
+        ProjectAnalysisSummaryDTO response = new ProjectAnalysisSummaryDTO();
+        response.setPosts(postDTOs);
+        response.setCategorySummaries(categorySummaries);
+
+        return ResponseEntity.ok(response);
     }
 }

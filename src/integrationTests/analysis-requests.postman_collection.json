@@ -117,12 +117,24 @@
 			"response": []
 		},
 		{
-			"name": "Find Analysis Results by Project",
+			"name": "Find Posts and Analysis Results by Project",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/projects/analysis-results?projectName=Social Analysis 2025",
+					"raw": "http://localhost:8080/api/projects/Social Analysis 2025/analysis-summary",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -131,13 +143,8 @@
 					"path": [
 						"api",
 						"projects",
-						"analysis-results"
-					],
-					"query": [
-						{
-							"key": "projectName",
-							"value": "Social Analysis 2025"
-						}
+						"Social Analysis 2025",
+						"analysis-summary"
 					]
 				}
 			},
@@ -145,6 +152,33 @@
 		},
 		{
 			"name": "Find All Project Names for a Project Manager",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/project-managers/projects?managerId=101",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"project-managers",
+						"projects"
+					],
+					"query": [
+						{
+							"key": "managerId",
+							"value": "101"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Posts for Analysis Result Project Names",
 			"request": {
 				"method": "GET",
 				"header": [],
