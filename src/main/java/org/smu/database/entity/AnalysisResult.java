@@ -4,24 +4,33 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.smu.database.key.AnalysisResultId;
 
-import java.sql.Date;
-
 @Data
 @Entity
 @IdClass(AnalysisResultId.class)
+@Table(name = "Analysis_Result")
 public class AnalysisResult {
+
     @Id
+    @Column(name = "Post_ID") // match DB
+    private Integer postId;
+
+    @Id
+    @Column(name = "Project_Name") // match DB
+    private String projectName;
+
+    @Id
+    @Column(name = "AnalysisCategory_ID") // match DB
+    private Integer analysisCategoryId;
+
     @ManyToOne
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "Post_ID", insertable = false, updatable = false)
     private Post post;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "project_name")
+    @JoinColumn(name = "Project_Name", insertable = false, updatable = false)
     private Project project;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "analysis_category_id")
+    @JoinColumn(name = "AnalysisCategory_ID", insertable = false, updatable = false)
     private AnalysisCategory analysisCategory;
 }
