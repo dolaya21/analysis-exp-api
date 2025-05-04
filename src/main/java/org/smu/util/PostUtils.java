@@ -2,14 +2,11 @@ package org.smu.util;
 
 import org.smu.database.entity.Post;
 import org.smu.database.entity.Repost;
-import org.smu.database.entity.AnalysisResult;
 import org.smu.database.repository.AnalysisResultRepository;
 import org.smu.dto.PostResponseDTO;
-import org.smu.dto.AnalysisResultDTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PostUtils {
 
@@ -27,22 +24,16 @@ public class PostUtils {
             dto.setTime(p.getTime());
             dto.setRepost(false);
 
-            // ✅ Fetch analysis results using postId
-            List<AnalysisResult> results = analysisRepo.findByPostId(p.getPostId());
-            List<AnalysisResultDTO> resultDTOs = results.stream().map(r -> {
-                AnalysisResultDTO dtoR = new AnalysisResultDTO();
-                dtoR.setProjectName(r.getProject().getProjectName());
-                dtoR.setCategoryName(r.getAnalysisCategory().getCategoryName());
-                dtoR.setCategoryResult(r.getAnalysisCategory().getCategoryResult());
-                return dtoR;
-            }).collect(Collectors.toList());
+            List<String> projectNames = analysisRepo.findByPostId(p.getPostId()).stream()
+                    .map(r -> r.getProject().getProjectName())
+                    .distinct()
+                    .toList();
+            dto.setProjectNames(projectNames);
 
-            dto.setAnalysisResults(resultDTOs);
             dtos.add(dto);
         }
         return dtos;
     }
-
 
     public static List<PostResponseDTO> mapRepostsToDTOs(List<Repost> reposts) {
         List<PostResponseDTO> dtos = new ArrayList<>();
@@ -55,7 +46,8 @@ public class PostUtils {
             dto.setRepost(true);
             dto.setOriginalUsername(r.getRepostUserEntity().getUsername());
             dto.setOriginalTime(r.getRepostTime());
-            dto.setAnalysisResults(new ArrayList<>()); // or fetch analysis if needed
+            dto.setProjectNames(new ArrayList<>());
+
             dtos.add(dto);
         }
         return dtos;

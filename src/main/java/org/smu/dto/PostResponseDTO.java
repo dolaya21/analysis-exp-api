@@ -18,5 +18,5 @@ public class PostResponseDTO {
     private boolean isRepost;
     private String originalUsername;
     private LocalDateTime originalTime;
-    private List<AnalysisResultDTO> analysisResults;
+    private List<String> projectNames;
 }
