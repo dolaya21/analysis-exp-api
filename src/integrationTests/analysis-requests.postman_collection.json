@@ -117,6 +117,60 @@
 			"response": []
 		},
 		{
+			"name": "Find Analysis Results by Project",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/projects/analysis-results?projectName=Social Analysis 2025",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"projects",
+						"analysis-results"
+					],
+					"query": [
+						{
+							"key": "projectName",
+							"value": "Social Analysis 2025"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find All Project Names for a Project Manager",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/project-managers/projects?managerId=101",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"project-managers",
+						"projects"
+					],
+					"query": [
+						{
+							"key": "managerId",
+							"value": "101"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Add Project Manager",
 			"request": {
 				"method": "POST",
@@ -199,6 +253,36 @@
 						"api",
 						"projects",
 						"add-posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Analysis Result",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"postId\": 1,\n  \"projectName\": \"Social Analysis 2025\",\n  \"categoryName\": \"Sentiment\",\n  \"categoryResult\": \"Positive\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/analysis/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"analysis",
+						"add"
 					]
 				}
 			},
