@@ -19,5 +19,6 @@ public class User {
     private String countryOfResidence;
     private Integer age;
     private String gender;
-    private Boolean verified;
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean verified = false;
 }

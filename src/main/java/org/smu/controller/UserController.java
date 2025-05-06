@@ -28,7 +28,6 @@ public class UserController {
         user.setCountryOfResidence(request.getCountryOfResidence());
         user.setAge(request.getAge());
         user.setGender(request.getGender());
-        user.setVerified(request.getVerified());
 
         userRepository.save(user);
         return ResponseEntity.ok("User created successfully.");

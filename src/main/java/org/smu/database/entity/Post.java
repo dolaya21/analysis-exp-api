@@ -26,6 +26,8 @@ public class Post {
     private String location;
     @Column(name = "Number_of_Likes")
     private Integer numberOfLikes;
+    @Column(name = "Number_of_Dislikes")
+    private Integer numberOfDislikes;
     @Column(name = "Contains_Multimedia")
     private Boolean containsMultimedia;
 }

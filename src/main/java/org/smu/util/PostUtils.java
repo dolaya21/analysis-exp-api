@@ -20,6 +20,7 @@ public class PostUtils {
             dto.setText(p.getText());
             dto.setLocation(p.getLocation());
             dto.setNumberOfLikes(p.getNumberOfLikes());
+            dto.setNumberOfDislikes(p.getNumberOfDislikes());
             dto.setContainsMultimedia(p.getContainsMultimedia());
             dto.setTime(p.getTime());
             dto.setRepost(false);

@@ -84,6 +84,7 @@ public class ProjectController {
                 post.setText(postDto.getText());
                 post.setLocation(postDto.getLocation());
                 post.setNumberOfLikes(postDto.getNumberOfLikes());
+                post.setNumberOfDislikes(postDto.getNumberOfDislikes());
                 post.setContainsMultimedia(postDto.getContainsMultimedia());
 
                 postRepository.save(post);

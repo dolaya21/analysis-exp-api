@@ -13,6 +13,7 @@ public class PostResponseDTO {
     private String text;
     private String location;
     private Integer numberOfLikes;
+    private Integer numberOfDislikes;
     private Boolean containsMultimedia;
     private LocalDateTime time;
     private boolean isRepost;

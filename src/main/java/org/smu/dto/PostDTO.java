@@ -13,6 +13,7 @@ public class PostDTO {
     private String text;
     private String location;
     private Integer numberOfLikes;
+    private Integer numberOfDislikes;
     private Boolean containsMultimedia;
     private boolean isRepost;
     private String originalUsername;
