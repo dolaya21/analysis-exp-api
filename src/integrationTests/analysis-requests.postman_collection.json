@@ -95,7 +95,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/posts/by-name?name=Doe",
+					"raw": "http://localhost:8080/api/posts/by-name?name=",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -109,7 +109,7 @@
 					"query": [
 						{
 							"key": "name",
-							"value": "Doe"
+							"value": ""
 						}
 					]
 				}
@@ -134,7 +134,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/projects/Social Analysis 2025/analysis-summary",
+					"raw": "http://localhost:8080/api/projects/Tech M&A Tracker/analysis-summary",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -143,7 +143,7 @@
 					"path": [
 						"api",
 						"projects",
-						"Social Analysis 2025",
+						"Tech M&A Tracker",
 						"analysis-summary"
 					]
 				}
@@ -169,7 +169,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"postIds\": [1, 2]\n}\n",
+					"raw": "{\n  \"postIds\": [1,2]\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -198,7 +198,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/project-managers/projects?managerId=101",
+					"raw": "http://localhost:8080/api/project-managers/projects?managerId=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -212,34 +212,7 @@
 					"query": [
 						{
 							"key": "managerId",
-							"value": "101"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Find Posts for Analysis Result Project Names",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/project-managers/projects?managerId=101",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"project-managers",
-						"projects"
-					],
-					"query": [
-						{
-							"key": "managerId",
-							"value": "101"
+							"value": "1"
 						}
 					]
 				}
@@ -368,7 +341,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"postId\": 1,\n  \"projectName\": \"Social Analysis 2025\",\n  \"categoryName\": \"Sentiment\",\n  \"categoryResult\": \"Positive\"\n}",
+					"raw": "{\n  \"postId\": 18,\n  \"projectName\": \"Health Data Insights\",\n  \"categoryName\": \"Sentiment\",\n  \"categoryResult\": \"Positive\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -386,6 +359,64 @@
 						"api",
 						"analysis",
 						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"johndoe\",\n  \"socialMedia\": \"Facebook\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Dowson\",\n  \"countryOfBirth\": \"USA\",\n  \"countryOfResidence\": \"USA\",\n  \"age\": 30,\n  \"gender\": \"Male\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"postId\": 101,\n  \"username\": \"johndoe\",\n  \"socialMedia\": \"Twitter\",\n  \"time\": \"2025-05-06T15:30:00\",\n  \"text\": \"Hello!\",\n  \"location\": \"Dallas, TX\",\n  \"numberOfLikes\": 25,\n  \"numberOfDislikes\": 2,\n  \"containsMultimedia\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posts"
 					]
 				}
 			},

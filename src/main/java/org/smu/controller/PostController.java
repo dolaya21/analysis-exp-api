@@ -1,15 +1,17 @@
 package org.smu.controller;
 
 import org.smu.database.entity.AnalysisResult;
+import org.smu.database.entity.Post;
+import org.smu.database.entity.User;
+import org.smu.database.key.UserId;
 import org.smu.database.repository.PostRepository;
 import org.smu.database.repository.RepostRepository;
 import org.smu.database.repository.AnalysisResultRepository;
-import org.smu.dto.AnalysisCategorySummaryDTO;
-import org.smu.dto.AnalysisSummaryByPostRequestDTO;
-import org.smu.dto.AnalysisSummaryByPostResponseDTO;
-import org.smu.dto.PostResponseDTO;
+import org.smu.database.repository.UserRepository;
+import org.smu.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -30,7 +32,11 @@ public class PostController {
     private RepostRepository repostRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private AnalysisResultRepository analysisResultRepository;
+
 
     @GetMapping("/by-social-media/{name}")
     public List<PostResponseDTO> getPostsBySocialMedia(@PathVariable String name) {
@@ -101,4 +107,30 @@ public class PostController {
         return new AnalysisSummaryByPostResponseDTO(new ArrayList<>(projectNames), categorySummaries);
     }
 
+    @PostMapping
+    public ResponseEntity<?> createPost(@RequestBody CreatePostDTO request) {
+        if (request.getNumberOfLikes() < 0 || request.getNumberOfDislikes() < 0) {
+            return ResponseEntity.badRequest().body("Likes and dislikes must be non-negative.");
+        }
+
+        UserId userId = new UserId(request.getUsername(), request.getSocialMedia());
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User does not exist.");
+        }
+
+        Post post = new Post();
+        post.setPostId(request.getPostId());
+        post.setUser(user);
+        post.setTime(request.getTime());
+        post.setText(request.getText());
+        post.setLocation(request.getLocation());
+        post.setNumberOfLikes(request.getNumberOfLikes());
+        post.setNumberOfDislikes(request.getNumberOfDislikes());
+        post.setContainsMultimedia(request.getContainsMultimedia());
+
+        postRepository.save(post);
+        return ResponseEntity.ok("Post created successfully.");
+    }
 }
