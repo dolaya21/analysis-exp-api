@@ -1,6 +1,7 @@
 package org.smu.controller;
 
 import org.smu.database.entity.*;
+import org.smu.database.key.UserId;
 import org.smu.database.repository.*;
 import org.smu.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class ProjectController {
             if (existingPostOpt.isPresent()) {
                 post = existingPostOpt.get();
             } else {
-                Optional<User> userOpt = userRepository.findById(postDto.getUsername());
+                Optional<User> userOpt = userRepository.findById(new UserId(postDto.getUsername(), postDto.getSocialMedia()));
                 Optional<SocialMedia> smOpt = socialMediaRepository.findById(postDto.getSocialMedia());
 
                 if (userOpt.isEmpty() || smOpt.isEmpty()) {
@@ -131,7 +132,7 @@ public class ProjectController {
 
             PostWithResultsDTO dto = new PostWithResultsDTO();
             dto.setPostId(post.getPostId());
-            dto.setUsername(post.getUser().getUsername());
+            dto.setUsername(post.getUser().getId().getUsername());
             dto.setText(post.getText());
             dto.setLocation(post.getLocation());
             dto.setSocialMedia(post.getSocialMedia().getName());

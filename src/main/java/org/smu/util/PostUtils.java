@@ -16,7 +16,7 @@ public class PostUtils {
             PostResponseDTO dto = new PostResponseDTO();
             dto.setPostId(p.getPostId());
             dto.setSocialMedia(p.getSocialMedia().getName());
-            dto.setUsername(p.getUser().getUsername());
+            dto.setUsername(p.getUser().getId().getUsername());
             dto.setText(p.getText());
             dto.setLocation(p.getLocation());
             dto.setNumberOfLikes(p.getNumberOfLikes());
@@ -41,11 +41,11 @@ public class PostUtils {
         for (Repost r : reposts) {
             PostResponseDTO dto = new PostResponseDTO();
             dto.setPostId(null);
-            dto.setSocialMedia(r.getSocialMediaEntity().getName());
-            dto.setUsername(r.getUserEntity().getUsername());
+            dto.setSocialMedia(r.getId().getSocialMedia());
+            dto.setUsername(r.getUserEntity().getId().getUsername());
             dto.setTime(r.getId().getTime());
             dto.setRepost(true);
-            dto.setOriginalUsername(r.getRepostUserEntity().getUsername());
+            dto.setOriginalUsername(r.getRepostUserEntity().getId().getUsername());
             dto.setOriginalTime(r.getRepostTime());
             dto.setProjectNames(new ArrayList<>());
 

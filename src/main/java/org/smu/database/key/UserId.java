@@ -1,15 +1,17 @@
 package org.smu.database.key;
 
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @Embeddable
-public class RepostId implements Serializable {
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserId implements Serializable {
     private String username;
     private String socialMedia;
-    private LocalDateTime time;
 }

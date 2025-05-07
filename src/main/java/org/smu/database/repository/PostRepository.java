@@ -13,7 +13,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     List<Post> findByTimeBetween(LocalDateTime start, LocalDateTime end);
 
-    List<Post> findByUser_UsernameAndSocialMedia_Name(String username, String socialMedia);
+    List<Post> findByUser_Id_UsernameAndUser_Id_SocialMedia(String username, String socialMedia);
 
     List<Post> findByUser_FirstNameIgnoreCaseOrUser_LastNameIgnoreCase(String firstName, String lastName);
 

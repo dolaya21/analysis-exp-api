@@ -15,19 +15,19 @@ public class Repost {
     private RepostId id;
 
     @ManyToOne
-    @MapsId("socialMedia")
-    @JoinColumn(name = "social_media")
-    private SocialMedia socialMediaEntity;
-
-    @ManyToOne
-    @MapsId("user")
-    @JoinColumn(name = "user")
+    @JoinColumns({
+            @JoinColumn(name = "Username", referencedColumnName = "Username"),
+            @JoinColumn(name = "Social_Media", referencedColumnName = "Social_Media")
+    })
     private User userEntity;
 
     @ManyToOne
-    @JoinColumn(name = "repost_username")
+    @JoinColumns({
+            @JoinColumn(name = "Repost_Username", referencedColumnName = "Username"),
+            @JoinColumn(name = "Repost_Social_Media", referencedColumnName = "Social_Media")
+    })
     private User repostUserEntity;
 
-    @Column(name = "repost_time")
+    @Column(name = "Repost_Time")
     private LocalDateTime repostTime;
 }

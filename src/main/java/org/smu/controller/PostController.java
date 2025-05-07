@@ -36,7 +36,7 @@ public class PostController {
     public List<PostResponseDTO> getPostsBySocialMedia(@PathVariable String name) {
         List<PostResponseDTO> results = new ArrayList<>();
         results.addAll(mapPostsToDTOs(postRepository.findBySocialMedia_Name(name), analysisResultRepository));
-        results.addAll(mapRepostsToDTOs(repostRepository.findBySocialMediaEntity_Name(name)));
+        results.addAll(mapRepostsToDTOs(repostRepository.findById_SocialMedia(name)));
         return results;
     }
 
@@ -58,9 +58,9 @@ public class PostController {
     ) {
         List<PostResponseDTO> results = new ArrayList<>();
         results.addAll(mapPostsToDTOs(
-                postRepository.findByUser_UsernameAndSocialMedia_Name(username, media), analysisResultRepository));
+                postRepository.findByUser_Id_UsernameAndUser_Id_SocialMedia(username, media), analysisResultRepository));
         results.addAll(mapRepostsToDTOs(
-                repostRepository.findByUserEntity_UsernameAndSocialMediaEntity_Name(username, media)));
+                repostRepository.findByUserEntity_Id_UsernameAndUserEntity_Id_SocialMedia(username, media)));
         return results;
     }
 
