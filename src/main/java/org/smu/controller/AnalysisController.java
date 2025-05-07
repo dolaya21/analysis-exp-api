@@ -43,9 +43,9 @@ public class AnalysisController {
         category = categoryRepository.save(category);
 
         AnalysisResult result = new AnalysisResult();
-        result.setPostId(postOpt.get().getPostId()); // <-- set ID field
-        result.setProjectName(projectOpt.get().getProjectName()); // <-- set ID field
-        result.setAnalysisCategoryId(category.getAnalysisCategoryId()); // <-- set ID field
+        result.setPostId(postOpt.get().getPostId());
+        result.setProjectName(projectOpt.get().getProjectName());
+        result.setAnalysisCategoryId(category.getAnalysisCategoryId());
 
         result.setPost(postOpt.get());
         result.setProject(projectOpt.get());
