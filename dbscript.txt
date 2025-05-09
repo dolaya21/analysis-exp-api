@@ -1,0 +1,79 @@
+CREATE DATABASE IF NOT EXISTS SocialMediaAnalysis;
+USE SocialMediaAnalysis;
+
+CREATE TABLE Social_Media (
+    Name VARCHAR(50) PRIMARY KEY
+);
+
+CREATE TABLE User (
+    Username VARCHAR(50),
+    Social_Media VARCHAR(50),
+    First_Name VARCHAR(50),
+    Last_Name VARCHAR(50),
+    Country_of_Birth VARCHAR(50),
+    Country_of_Residence VARCHAR(50),
+    Age INT,
+    Gender VARCHAR(10),
+    Verified BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY (Username, Social_Media),
+    FOREIGN KEY (Social_Media) REFERENCES Social_Media(Name)
+);
+
+CREATE TABLE Post (
+    Username VARCHAR(50),
+    Social_Media VARCHAR(50),
+    Time DATETIME,
+    Text TEXT,
+    Location VARCHAR(100),
+    Number_of_Likes INT CHECK (Number_of_Likes >= 0),
+    Number_of_Dislikes INT CHECK (Number_of_Dislikes >= 0),
+    Contains_Multimedia BOOLEAN,
+    PRIMARY KEY (Username, Time, Social_Media),
+    FOREIGN KEY (Username, Social_Media) REFERENCES User(Username, Social_Media),
+    FOREIGN KEY (Social_Media) REFERENCES Social_Media(Name)
+);
+
+CREATE TABLE Repost (
+    Social_Media VARCHAR(50),
+    Username VARCHAR(50),
+    Time DATETIME,
+    Repost_Username VARCHAR(50),
+    Repost_Social_Media VARCHAR(50),
+    Repost_Time DATETIME,
+    PRIMARY KEY (Social_Media, Username, Time),
+    FOREIGN KEY (Username, Social_Media) REFERENCES User(Username, Social_Media),
+    FOREIGN KEY (Repost_Username, Repost_Social_Media) REFERENCES User(Username, Social_Media)
+);
+
+CREATE TABLE Project_Manager (
+    Employee_Id INT PRIMARY KEY,
+    First_Name VARCHAR(50),
+    Last_Name VARCHAR(50)
+);
+
+CREATE TABLE Project (
+    Project_Name VARCHAR(100) PRIMARY KEY,
+    Project_Manager_Employee_ID INT,
+    Institute_name VARCHAR(100),
+    start_date DATE,
+    end_date DATE,
+    FOREIGN KEY (Project_Manager_Employee_ID) REFERENCES Project_Manager(Employee_Id)
+);
+
+CREATE TABLE Analysis_Category (
+    Category_Name VARCHAR(100) PRIMARY KEY,
+    Category_Result TEXT
+);
+
+CREATE TABLE Analysis_Result (
+    Username VARCHAR(50),
+    Time DATETIME,
+    Social_Media VARCHAR(50),
+    Project_Name VARCHAR(100),
+    Category_Name VARCHAR(100),
+    PRIMARY KEY (Username, Time, Social_Media, Project_Name, Category_Name),
+    FOREIGN KEY (Username, Social_Media) REFERENCES User(Username, Social_Media),
+    FOREIGN KEY (Username, Time, Social_Media) REFERENCES Post(Username, Time, Social_Media),
+    FOREIGN KEY (Project_Name) REFERENCES Project(Project_Name),
+    FOREIGN KEY (Category_Name) REFERENCES Analysis_Category(Category_Name)
+);

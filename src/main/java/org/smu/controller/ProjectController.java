@@ -39,11 +39,28 @@ public class ProjectController {
 
     @PostMapping
     public ResponseEntity<?> createProject(@RequestBody ProjectRequestDTO request) {
-        Optional<ProjectManager> pmOpt = projectManagerRepository.findById(request.getProjectManagerEmployeeId());
-        if (pmOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Project manager not found");
+        // Validate dates
+        if (request.getStartDate() != null && request.getEndDate() != null &&
+                request.getStartDate().isAfter(request.getEndDate())) {
+            return ResponseEntity.badRequest().body("Start date must be before end date.");
         }
 
+        // Check if project exists and manager ID matches
+        Optional<Project> existingProjectOpt = projectRepository.findById(request.getProjectName());
+        if (existingProjectOpt.isPresent()) {
+            Project existingProject = existingProjectOpt.get();
+            if (existingProject.getProjectManager().getEmployeeId().equals(request.getProjectManagerEmployeeId())) {
+                return ResponseEntity.badRequest().body("Project with this name and manager already exists.");
+            }
+        }
+
+        // Validate project manager exists
+        Optional<ProjectManager> pmOpt = projectManagerRepository.findById(request.getProjectManagerEmployeeId());
+        if (pmOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Project manager not found.");
+        }
+
+        // Create project
         Project project = new Project();
         project.setProjectName(request.getProjectName());
         project.setInstituteName(request.getInstituteName());

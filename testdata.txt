@@ -1,0 +1,68 @@
+USE SocialMediaAnalysis;
+-- Insert into Social_Media
+INSERT INTO Social_Media (Name) VALUES
+('Twitter'),
+('Facebook'),
+('Instagram'),
+('LinkedIn'),
+('TikTok');
+
+-- Insert into User
+INSERT INTO User (Username, Social_Media, First_Name, Last_Name, Country_of_Birth, Country_of_Residence, Age, Gender, Verified) VALUES
+('jdoe', 'Twitter', 'John', 'Doe', 'USA', 'USA', 30, 'Male', TRUE),
+('asmith', 'Facebook', 'Alice', 'Smith', 'Canada', 'UK', 25, 'Female', FALSE),
+('bwayne', 'Instagram', 'Bruce', 'Wayne', 'USA', 'USA', 35, 'Male', TRUE),
+('ckent', 'LinkedIn', 'Clark', 'Kent', 'USA', 'Metropolis', 32, 'Male', TRUE),
+('dprince', 'TikTok', 'Diana', 'Prince', 'Greece', 'France', 28, 'Female', TRUE);
+
+-- Insert into Post
+INSERT INTO Post (Username, Social_Media, Time, Text, Location, Number_of_Likes, Number_of_Dislikes, Contains_Multimedia) VALUES
+('jdoe', 'Twitter', '2024-01-10 14:30:00', 'Excited for the new project launch!', 'New York', 120, 10, TRUE),
+('asmith', 'Facebook', '2024-02-15 09:00:00', 'Happy to connect with everyone here.', 'London', 85, 5, FALSE),
+('bwayne', 'Instagram', '2024-03-20 18:45:00', 'Just finished a big event in Gotham.', 'Gotham', 300, 20, TRUE),
+('ckent', 'LinkedIn', '2024-04-25 13:15:00', 'Daily Planet never sleeps!', 'Metropolis', 150, 15, FALSE),
+('dprince', 'TikTok', '2024-05-01 07:20:00', 'Justice League assembly today!', 'Paris', 220, 12, TRUE);
+
+-- Insert into Repost
+INSERT INTO Repost (Social_Media, Username, Time, Repost_Username, Repost_Social_Media, Repost_Time) VALUES
+('Twitter', 'jdoe', '2024-01-11 00:00:00', 'jdoe', 'Twitter', '2024-01-10 14:30:00'),
+('Facebook', 'asmith', '2024-02-16 00:00:00', 'asmith', 'Facebook', '2024-02-15 09:00:00'),
+('Instagram', 'bwayne', '2024-03-21 00:00:00', 'bwayne', 'Instagram', '2024-03-20 18:45:00'),
+('LinkedIn', 'ckent', '2024-04-26 00:00:00', 'ckent', 'LinkedIn', '2024-04-25 13:15:00'),
+('TikTok', 'dprince', '2024-05-02 00:00:00', 'dprince', 'TikTok', '2024-05-01 07:20:00');
+
+
+-- Insert into Project_Manager
+INSERT INTO Project_Manager (Employee_Id, First_Name, Last_Name) VALUES
+(101, 'Peter', 'Parker'),
+(102, 'Jane', 'Foster'),
+(103, 'Tony', 'Stark'),
+(104, 'Bruce', 'Banner'),
+(105, 'Steve', 'Rogers');
+
+-- Insert into Project
+INSERT INTO Project (Project_Name, Project_Manager_Employee_ID, Institute_name, start_date, end_date) VALUES
+('AI Sentiment', 101, 'MIT', '2023-01-10', '2024-12-31'),
+('User Analysis', 102, 'Oxford', '2023-01-10', '2024-12-31'),
+('Media Trends', 103, 'Stanford', '2023-01-10', '2024-12-31'),
+('Fake News Filter', 104, 'Harvard', '2023-01-10', '2024-12-31'),
+('Global Outreach', 105, 'Cambridge', '2023-01-10', '2024-12-31');
+
+-- Insert into Analysis_Category
+INSERT INTO Analysis_Category (Category_Name, Category_Result) VALUES
+('Sentiment', 'Positive/Negative/Neutral'),
+('Political Leaning', 'Left/Right/Neutral'),
+('Engagement', 'High/Medium/Low'),
+('Topic', 'Topic Label'),
+('Multimedia Presence', 'True/False');
+
+-- Insert into Analysis_Result
+INSERT INTO Analysis_Result (Username, Time, Social_Media, Project_Name, Category_Name) VALUES
+('jdoe', '2024-01-10 14:30:00', 'Twitter', 'AI Sentiment', 'Sentiment'),
+('asmith', '2024-02-15 09:00:00', 'Facebook', 'User Analysis', 'Political Leaning'),
+('bwayne', '2024-03-20 18:45:00', 'Instagram', 'Media Trends', 'Engagement'),
+('ckent', '2024-04-25 13:15:00', 'LinkedIn', 'Fake News Filter', 'Topic'),
+('dprince', '2024-05-01 07:20:00', 'TikTok', 'Global Outreach', 'Multimedia Presence');
+
+
+select * from Analysis_Category
