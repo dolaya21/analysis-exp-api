@@ -57,43 +57,58 @@ public class ProjectController {
 
     @PostMapping("/add-posts")
     public ResponseEntity<?> linkPostsToProject(@RequestBody ProjectPostLinkDTO request) {
-        Optional<Project> projectOpt = projectRepository.findById(request.getProjectName());
-        if (projectOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Project not found");
-        }
+        //find project
+        Project project = projectRepository,findById(request.getProjectName())
+            .orElseThrow(() -->
+                new ResponseStatusException(
+                    HTTPStatus.BAD_REQUESET,
+                    "Project not found: " + request.getprojectName()
+                    )
+            );
 
-        List<PostId> postIds = request.getPostIds();
-        if (postIds == null || postIds.isEmpty()) {
-            return ResponseEntity.badRequest().body("No post IDs provided.");
-        }
+        //create and find AnalysisCategory
+        AnalysisCategory category = analysisCategoryRepository
+            .findByCategoryName(request.getCategoryName())
+            .orElseGet(() -> {
+                AnalysisCategory c = new AnalysisCategory(); 
+                c.setCategoryName(request.getCategoryName());
+                c.setCategoryResult(request.getCategoryResult());
+                return analysisCategoryRepository.save(c);
+            });
 
-        AnalysisCategory category = analysisCategoryRepository.findById(request.getCategoryName())
-                .orElseGet(() -> {
-                    AnalysisCategory newCategory = new AnalysisCategory();
-                    newCategory.setCategoryName(request.getCategoryName());
-                    newCategory.setCategoryResult(request.getCategoryResult());
-                    return analysisCategoryRepository.save(newCategory);
-                });
-
-        for (PostId postId : postIds) {
-            Optional<Post> postOpt = postRepository.findById(postId);
-            if (postOpt.isEmpty()) continue;
-            Post post = postOpt.get();
-
-            AnalysisResult result = new AnalysisResult();
-            result.setUsername(post.getUsername());
-            result.setTime(post.getTime());
-            result.setSocialMedia(post.getSocialMedia());
-            result.setProjectName(projectOpt.get().getProjectName());
-            result.setCategoryName(category.getCategoryName());
+        for (PostIdentifierDTO pid : request.getPostIds()) {
+            Post post = postRepository
+                .findByUser_UsernameAndSocialMedia_NameAndTime(
+                    pid.getUsername(),
+                    pid.getSocialMedia(),
+                    pid.getTime()
+                )
+                .orElseThrow(() ->
+                    new ResponseStatusException(
+                        HttpsStatus.BAD_REQUEST,
+                        "Post not found for " +
+                        pid.getSocialMedia() + "/" + 
+                        pid.getUsername() + " @ " +
+                        pid.getTime()
+                    )
+                );
+            AnalysisResult result = new AnalysisResult(); 
             result.setPost(post);
-            result.setProject(projectOpt.get());
-            category.setCategoryResult(request.getCategoryResult());
+            result.setProject(project);
             result.setAnalysisCategory(category);
-            analysisResultRepository.save(result);
+            resultRepository.save(result);
         }
 
-        return ResponseEntity.ok("Analysis results linked to project successfully for provided posts.");
+        return ResponseEntity.ok(
+            "Linked " + 
+            request.getPostIds().size() + 
+            " posts to project '" + 
+            project.getProjectName() + 
+            "' with category " + 
+            category.getCategoryName() + 
+            "'"
+        );
+        
     }
 
     @GetMapping("/analysis-results")
