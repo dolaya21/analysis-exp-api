@@ -7,9 +7,9 @@ import java.util.List;
 
 @Data
 public class PostDTO {
-    private Integer postId;
-    private String socialMedia;
     private String username;
+    private String socialMedia;
+    private LocalDateTime time;
     private String text;
     private String location;
     private Integer numberOfLikes;
@@ -18,6 +18,5 @@ public class PostDTO {
     private boolean isRepost;
     private String originalUsername;
     private LocalDateTime originalTime;
-
     private List<AnalysisResultDTO> analysisResults;
 }

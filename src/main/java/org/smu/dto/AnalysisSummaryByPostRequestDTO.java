@@ -5,5 +5,5 @@ import java.util.List;
 
 @Data
 public class AnalysisSummaryByPostRequestDTO {
-    private List<Integer> postIds;
+    private List<CompositePostKeyDTO> posts;
 }

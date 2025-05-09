@@ -2,29 +2,39 @@ package org.smu.database.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.smu.database.key.PostId;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table
 @Data
+@IdClass(PostId.class)
+@Table(name = "Post")
 public class Post {
-    @Id
-    @Column(name = "Post_ID")
-    private Integer postId;
 
-    @ManyToOne
-    @JoinColumn(name = "Social_Media", referencedColumnName = "Name", insertable = false, updatable = false)
-    private SocialMedia socialMedia;
+    @Id
+    @Column(name = "Username")
+    private String username;
+
+    @Id
+    @Column(name = "Time")
+    private LocalDateTime time;
+
+    @Id
+    @Column(name = "Social_Media")
+    private String socialMedia;
 
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "Username", referencedColumnName = "Username"),
-            @JoinColumn(name = "Social_Media", referencedColumnName = "Social_Media")
+            @JoinColumn(name = "Username", referencedColumnName = "Username", insertable = false, updatable = false),
+            @JoinColumn(name = "Social_Media", referencedColumnName = "Social_Media", insertable = false, updatable = false)
     })
     private User user;
 
-    private LocalDateTime time;
+    @ManyToOne
+    @JoinColumn(name = "Social_Media", referencedColumnName = "Name", insertable = false, updatable = false)
+    private SocialMedia socialMediaEntity;
+
     private String text;
     private String location;
 

@@ -4,6 +4,7 @@ import org.smu.database.entity.AnalysisCategory;
 import org.smu.database.entity.AnalysisResult;
 import org.smu.database.entity.Post;
 import org.smu.database.entity.Project;
+import org.smu.database.key.PostId;
 import org.smu.database.repository.AnalysisCategoryRepository;
 import org.smu.database.repository.AnalysisResultRepository;
 import org.smu.database.repository.PostRepository;
@@ -30,7 +31,8 @@ public class AnalysisController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addAnalysis(@RequestBody AnalysisResultDTO request) {
-        Optional<Post> postOpt = postRepository.findById(request.getPostId());
+        PostId postId = new PostId(request.getUsername(), request.getTime(), request.getSocialMedia());
+        Optional<Post> postOpt = postRepository.findById(postId);
         Optional<Project> projectOpt = projectRepository.findById(request.getProjectName());
 
         if (postOpt.isEmpty() || projectOpt.isEmpty()) {
@@ -43,9 +45,11 @@ public class AnalysisController {
         category = categoryRepository.save(category);
 
         AnalysisResult result = new AnalysisResult();
-        result.setPostId(postOpt.get().getPostId());
-        result.setProjectName(projectOpt.get().getProjectName());
-        result.setAnalysisCategoryId(category.getAnalysisCategoryId());
+        result.setUsername(request.getUsername());
+        result.setTime(request.getTime());
+        result.setSocialMedia(request.getSocialMedia());
+        result.setProjectName(request.getProjectName());
+        result.setCategoryName(category.getCategoryName());
 
         result.setPost(postOpt.get());
         result.setProject(projectOpt.get());

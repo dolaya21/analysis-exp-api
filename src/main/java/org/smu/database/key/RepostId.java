@@ -1,5 +1,6 @@
 package org.smu.database.key;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Data;
 
@@ -9,7 +10,12 @@ import java.time.LocalDateTime;
 @Data
 @Embeddable
 public class RepostId implements Serializable {
-    private String username;
+    @Column(name = "Social_Media")
     private String socialMedia;
+
+    @Column(name = "Username")
+    private String username;
+
+    @Column(name = "Time")
     private LocalDateTime time;
 }

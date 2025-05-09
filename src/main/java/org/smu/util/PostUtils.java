@@ -2,6 +2,7 @@ package org.smu.util;
 
 import org.smu.database.entity.Post;
 import org.smu.database.entity.Repost;
+import org.smu.database.key.PostId;
 import org.smu.database.repository.AnalysisResultRepository;
 import org.smu.dto.PostResponseDTO;
 
@@ -14,23 +15,27 @@ public class PostUtils {
         List<PostResponseDTO> dtos = new ArrayList<>();
         for (Post p : posts) {
             PostResponseDTO dto = new PostResponseDTO();
-            dto.setPostId(p.getPostId());
-            dto.setSocialMedia(p.getSocialMedia().getName());
-            dto.setUsername(p.getUser().getId().getUsername());
+            PostId id = new PostId(p.getUsername(), p.getTime(), p.getSocialMedia());
+
+            dto.setUsername(id.getUsername());
+            dto.setTime(id.getTime());
+            dto.setSocialMedia(id.getSocialMedia());
+
             dto.setText(p.getText());
             dto.setLocation(p.getLocation());
             dto.setNumberOfLikes(p.getNumberOfLikes());
             dto.setNumberOfDislikes(p.getNumberOfDislikes());
             dto.setContainsMultimedia(p.getContainsMultimedia());
-            dto.setTime(p.getTime());
             dto.setRepost(false);
 
-            List<String> projectNames = analysisRepo.findByPostId(p.getPostId()).stream()
+            List<String> projectNames = analysisRepo
+                    .findByPostCompositeKey(id.getUsername(), id.getTime(), id.getSocialMedia())
+                    .stream()
                     .map(r -> r.getProject().getProjectName())
                     .distinct()
                     .toList();
-            dto.setProjectNames(projectNames);
 
+            dto.setProjectNames(projectNames);
             dtos.add(dto);
         }
         return dtos;
@@ -40,15 +45,13 @@ public class PostUtils {
         List<PostResponseDTO> dtos = new ArrayList<>();
         for (Repost r : reposts) {
             PostResponseDTO dto = new PostResponseDTO();
-            dto.setPostId(null);
-            dto.setSocialMedia(r.getId().getSocialMedia());
             dto.setUsername(r.getUserEntity().getId().getUsername());
+            dto.setSocialMedia(r.getId().getSocialMedia());
             dto.setTime(r.getId().getTime());
             dto.setRepost(true);
             dto.setOriginalUsername(r.getRepostUserEntity().getId().getUsername());
             dto.setOriginalTime(r.getRepostTime());
-            dto.setProjectNames(new ArrayList<>());
-
+            dto.setProjectNames(new ArrayList<>()); // reposts don't have associated analysis
             dtos.add(dto);
         }
         return dtos;

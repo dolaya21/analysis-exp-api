@@ -3,6 +3,7 @@ package org.smu.controller;
 import org.smu.database.entity.AnalysisResult;
 import org.smu.database.entity.Post;
 import org.smu.database.entity.User;
+import org.smu.database.key.PostId;
 import org.smu.database.key.UserId;
 import org.smu.database.repository.PostRepository;
 import org.smu.database.repository.RepostRepository;
@@ -37,11 +38,10 @@ public class PostController {
     @Autowired
     private AnalysisResultRepository analysisResultRepository;
 
-
     @GetMapping("/by-social-media/{name}")
     public List<PostResponseDTO> getPostsBySocialMedia(@PathVariable String name) {
         List<PostResponseDTO> results = new ArrayList<>();
-        results.addAll(mapPostsToDTOs(postRepository.findBySocialMedia_Name(name), analysisResultRepository));
+        results.addAll(mapPostsToDTOs(postRepository.findBySocialMedia(name), analysisResultRepository));
         results.addAll(mapRepostsToDTOs(repostRepository.findById_SocialMedia(name)));
         return results;
     }
@@ -82,27 +82,29 @@ public class PostController {
 
     @PostMapping("/project-summary-by-posts")
     public AnalysisSummaryByPostResponseDTO getProjectSummaryByPosts(@RequestBody AnalysisSummaryByPostRequestDTO request) {
-        List<AnalysisResult> results = analysisResultRepository.findByPostIdIn(request.getPostIds());
+        List<AnalysisResult> results = request.getPosts().stream()
+                .flatMap(postKey -> analysisResultRepository
+                        .findByPostCompositeKey(postKey.getUsername(), postKey.getTime(), postKey.getSocialMedia())
+                        .stream())
+                .collect(Collectors.toList());
 
         Set<String> projectNames = results.stream()
                 .map(ar -> ar.getProject().getProjectName())
                 .collect(Collectors.toSet());
 
-        Map<String, Set<Integer>> categoryToPostIdsWithResult = new HashMap<>();
+        Map<String, Set<String>> categoryToPostKeys = new HashMap<>();
         for (AnalysisResult result : results) {
             String category = result.getAnalysisCategory().getCategoryName();
+            String key = result.getUsername() + "|" + result.getTime() + "|" + result.getSocialMedia();
             if (result.getAnalysisCategory().getCategoryResult() != null && !result.getAnalysisCategory().getCategoryResult().isEmpty()) {
-                categoryToPostIdsWithResult
-                        .computeIfAbsent(category, k -> new HashSet<>())
-                        .add(result.getPost().getPostId());
+                categoryToPostKeys.computeIfAbsent(category, k -> new HashSet<>()).add(key);
             }
         }
 
-        List<AnalysisCategorySummaryDTO> categorySummaries = new ArrayList<>();
-        for (String category : categoryToPostIdsWithResult.keySet()) {
-            double percentage = 100.0 * categoryToPostIdsWithResult.get(category).size() / request.getPostIds().size();
-            categorySummaries.add(new AnalysisCategorySummaryDTO(category, percentage));
-        }
+        int totalPosts = request.getPosts().size();
+        List<AnalysisCategorySummaryDTO> categorySummaries = categoryToPostKeys.entrySet().stream()
+                .map(e -> new AnalysisCategorySummaryDTO(e.getKey(), (100.0 * e.getValue().size()) / totalPosts))
+                .toList();
 
         return new AnalysisSummaryByPostResponseDTO(new ArrayList<>(projectNames), categorySummaries);
     }
@@ -120,8 +122,11 @@ public class PostController {
             return ResponseEntity.badRequest().body("User does not exist.");
         }
 
+        PostId postId = new PostId(request.getUsername(), request.getTime(), request.getSocialMedia());
         Post post = new Post();
-        post.setPostId(request.getPostId());
+        post.setUsername(postId.getUsername());
+        post.setTime(postId.getTime());
+        post.setSocialMedia(postId.getSocialMedia());
         post.setUser(user);
         post.setTime(request.getTime());
         post.setText(request.getText());

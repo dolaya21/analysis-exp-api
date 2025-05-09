@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class CreatePostDTO {
-    private Integer postId;
     private String username;
     private String socialMedia;
     private LocalDateTime time;

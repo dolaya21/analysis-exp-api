@@ -1,6 +1,7 @@
 package org.smu.controller;
 
 import org.smu.database.entity.*;
+import org.smu.database.key.PostId;
 import org.smu.database.key.UserId;
 import org.smu.database.repository.*;
 import org.smu.dto.*;
@@ -8,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,6 +33,9 @@ public class ProjectController {
 
     @Autowired
     private AnalysisResultRepository analysisResultRepository;
+    @Autowired
+    private AnalysisCategoryRepository analysisCategoryRepository;
+
 
     @PostMapping
     public ResponseEntity<?> createProject(@RequestBody ProjectRequestDTO request) {
@@ -61,40 +62,38 @@ public class ProjectController {
             return ResponseEntity.badRequest().body("Project not found");
         }
 
-        List<Post> savedPosts = new ArrayList<>();
-
-        for (PostDTO postDto : request.getPosts()) {
-            Optional<Post> existingPostOpt = postRepository.findByPostId(postDto.getPostId());
-            Post post;
-
-            if (existingPostOpt.isPresent()) {
-                post = existingPostOpt.get();
-            } else {
-                Optional<User> userOpt = userRepository.findById(new UserId(postDto.getUsername(), postDto.getSocialMedia()));
-                Optional<SocialMedia> smOpt = socialMediaRepository.findById(postDto.getSocialMedia());
-
-                if (userOpt.isEmpty() || smOpt.isEmpty()) {
-                    return ResponseEntity.badRequest().body("User or Social Media not found for post ID: " + postDto.getPostId());
-                }
-
-                post = new Post();
-                post.setPostId(postDto.getPostId());
-                post.setUser(userOpt.get());
-                post.setSocialMedia(smOpt.get());
-                post.setTime(postDto.getOriginalTime());
-                post.setText(postDto.getText());
-                post.setLocation(postDto.getLocation());
-                post.setNumberOfLikes(postDto.getNumberOfLikes());
-                post.setNumberOfDislikes(postDto.getNumberOfDislikes());
-                post.setContainsMultimedia(postDto.getContainsMultimedia());
-
-                postRepository.save(post);
-            }
-
-            savedPosts.add(post);
+        List<PostId> postIds = request.getPostIds();
+        if (postIds == null || postIds.isEmpty()) {
+            return ResponseEntity.badRequest().body("No post IDs provided.");
         }
 
-        return ResponseEntity.ok("Posts linked to project successfully.");
+        AnalysisCategory category = analysisCategoryRepository.findById(request.getCategoryName())
+                .orElseGet(() -> {
+                    AnalysisCategory newCategory = new AnalysisCategory();
+                    newCategory.setCategoryName(request.getCategoryName());
+                    newCategory.setCategoryResult(request.getCategoryResult());
+                    return analysisCategoryRepository.save(newCategory);
+                });
+
+        for (PostId postId : postIds) {
+            Optional<Post> postOpt = postRepository.findById(postId);
+            if (postOpt.isEmpty()) continue;
+            Post post = postOpt.get();
+
+            AnalysisResult result = new AnalysisResult();
+            result.setUsername(post.getUsername());
+            result.setTime(post.getTime());
+            result.setSocialMedia(post.getSocialMedia());
+            result.setProjectName(projectOpt.get().getProjectName());
+            result.setCategoryName(category.getCategoryName());
+            result.setPost(post);
+            result.setProject(projectOpt.get());
+            category.setCategoryResult(request.getCategoryResult());
+            result.setAnalysisCategory(category);
+            analysisResultRepository.save(result);
+        }
+
+        return ResponseEntity.ok("Analysis results linked to project successfully for provided posts.");
     }
 
     @GetMapping("/analysis-results")
@@ -103,7 +102,9 @@ public class ProjectController {
 
         List<AnalysisResultDTO> dtos = results.stream().map(ar -> {
             AnalysisResultDTO dto = new AnalysisResultDTO();
-            dto.setPostId(ar.getPost().getPostId());
+            dto.setUsername(ar.getUsername());
+            dto.setTime(ar.getTime());
+            dto.setSocialMedia(ar.getSocialMedia());
             dto.setProjectName(ar.getProject().getProjectName());
             dto.setCategoryName(ar.getAnalysisCategory().getCategoryName());
             dto.setCategoryResult(ar.getAnalysisCategory().getCategoryResult());
@@ -123,26 +124,29 @@ public class ProjectController {
         Project project = projectOpt.get();
         List<AnalysisResult> results = analysisResultRepository.findByProjectName(projectName);
 
-        Map<Integer, List<AnalysisResult>> groupedByPost = results.stream()
-                .collect(Collectors.groupingBy(r -> r.getPost().getPostId()));
+        Map<String, List<AnalysisResult>> groupedByPost = results.stream()
+                .collect(Collectors.groupingBy(r -> r.getUsername() + "|" + r.getTime() + "|" + r.getSocialMedia()));
 
         List<PostWithResultsDTO> postDTOs = new ArrayList<>();
-        for (Map.Entry<Integer, List<AnalysisResult>> entry : groupedByPost.entrySet()) {
+        for (Map.Entry<String, List<AnalysisResult>> entry : groupedByPost.entrySet()) {
             Post post = entry.getValue().get(0).getPost();
+            PostId id = new PostId(post.getUsername(), post.getTime(), post.getSocialMedia());
 
             PostWithResultsDTO dto = new PostWithResultsDTO();
-            dto.setPostId(post.getPostId());
-            dto.setUsername(post.getUser().getId().getUsername());
+            dto.setUsername(id.getUsername());
+            dto.setTime(id.getTime());
+            dto.setSocialMedia(id.getSocialMedia());
             dto.setText(post.getText());
             dto.setLocation(post.getLocation());
-            dto.setSocialMedia(post.getSocialMedia().getName());
-            dto.setTime(post.getTime());
 
             List<AnalysisResultDTO> arDTOs = entry.getValue().stream().map(ar -> {
                 AnalysisResultDTO ardto = new AnalysisResultDTO();
                 ardto.setCategoryName(ar.getAnalysisCategory().getCategoryName());
                 ardto.setCategoryResult(ar.getAnalysisCategory().getCategoryResult());
                 ardto.setProjectName(projectName);
+                ardto.setUsername(ar.getUsername());
+                ardto.setTime(ar.getTime());
+                ardto.setSocialMedia(ar.getSocialMedia());
                 return ardto;
             }).toList();
 
@@ -155,8 +159,9 @@ public class ProjectController {
                 .filter(ar -> ar.getAnalysisCategory().getCategoryResult() != null)
                 .collect(Collectors.groupingBy(
                         ar -> ar.getAnalysisCategory().getCategoryName(),
-                        Collectors.mapping(ar -> ar.getPost().getPostId(), Collectors.toSet())
-                )).entrySet().stream()
+                        Collectors.mapping(ar -> ar.getUsername() + "|" + ar.getTime() + "|" + ar.getSocialMedia(), Collectors.toSet())
+                ))
+                .entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> (long) e.getValue().size()));
 
         List<AnalysisCategorySummaryDTO> categorySummaries = countByCategory.entrySet().stream().map(e -> {
@@ -166,7 +171,6 @@ public class ProjectController {
             return cs;
         }).toList();
 
-        // Final wrapper
         ProjectAnalysisSummaryDTO response = new ProjectAnalysisSummaryDTO();
         response.setPosts(postDTOs);
         response.setCategorySummaries(categorySummaries);

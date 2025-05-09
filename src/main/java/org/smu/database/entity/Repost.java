@@ -12,12 +12,17 @@ import java.time.LocalDateTime;
 public class Repost {
 
     @EmbeddedId
+    @AttributeOverrides({
+            @AttributeOverride(name = "socialMedia", column = @Column(name = "Social_Media")),
+            @AttributeOverride(name = "username", column = @Column(name = "Username")),
+            @AttributeOverride(name = "time", column = @Column(name = "Time"))
+    })
     private RepostId id;
 
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "Username", referencedColumnName = "Username"),
-            @JoinColumn(name = "Social_Media", referencedColumnName = "Social_Media")
+            @JoinColumn(name = "Username", referencedColumnName = "Username", insertable = false, updatable = false),
+            @JoinColumn(name = "Social_Media", referencedColumnName = "Social_Media", insertable = false, updatable = false)
     })
     private User userEntity;
 
