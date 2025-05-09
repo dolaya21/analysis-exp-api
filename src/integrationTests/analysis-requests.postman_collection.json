@@ -1,205 +1,74 @@
 {
 	"info": {
-		"_postman_id": "c4f57b26-b56e-4c75-9ace-0fb5b1a893fe",
-		"name": "analysis-requests",
+		"_postman_id": "bb7d162d-42c4-44a8-ac41-bc86039682a8",
+		"name": "SocialMediaAnalysis Full API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "33660068"
 	},
 	"item": [
 		{
-			"name": "Find Posts By Social Media",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/cards/cards",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"cards",
-						"cards"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Find Post Between Dates",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/posts/between?start=2025-04-01T00:00:00&end=2025-04-30T23:59:59",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posts",
-						"between"
-					],
-					"query": [
-						{
-							"key": "start",
-							"value": "2025-04-01T00:00:00"
-						},
-						{
-							"key": "end",
-							"value": "2025-04-30T23:59:59"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Find Posts By User and Social Media",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/posts/by-user-and-media?username=john_doe&media=Twitter",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posts",
-						"by-user-and-media"
-					],
-					"query": [
-						{
-							"key": "username",
-							"value": "john_doe"
-						},
-						{
-							"key": "media",
-							"value": "Twitter"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Find Posts By First/Last Name",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/posts/by-name?name=",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posts",
-						"by-name"
-					],
-					"query": [
-						{
-							"key": "name",
-							"value": ""
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Find Posts and Analysis Results by Project",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/projects/Tech M&A Tracker/analysis-summary",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"projects",
-						"Tech M&A Tracker",
-						"analysis-summary"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Find Projects with Post Ids",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
+			"name": "Create User",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"postIds\": [1,2]\n}\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": "{\"username\": \"johndoe\", \"socialMedia\": \"Twitter\", \"firstName\": \"John\", \"lastName\": \"Doe\", \"countryOfBirth\": \"USA\", \"countryOfResidence\": \"USA\", \"age\": 30, \"gender\": \"Male\", \"verified\": true}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/posts/project-summary-by-posts",
-					"protocol": "http",
+					"raw": "localhost:8080/api/users",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"api",
-						"posts",
-						"project-summary-by-posts"
+						"users"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Find All Project Names for a Project Manager",
+			"name": "Create Project Manager",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"employeeId\": 1, \"firstName\": \"Alice\", \"lastName\": \"Smith\"}"
+				},
+				"url": {
+					"raw": "localhost:8080/api/project-managers",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"project-managers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Projects by Manager ID",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/project-managers/projects?managerId=1",
-					"protocol": "http",
+					"raw": "localhost:8080/api/project-managers/projects?managerId=1",
 					"host": [
 						"localhost"
 					],
@@ -220,78 +89,21 @@
 			"response": []
 		},
 		{
-			"name": "Find Posts for Analysis Result Project Names Copy",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/projects/analysis-results?projectName=Social Analysis 2025",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"projects",
-						"analysis-results"
-					],
-					"query": [
-						{
-							"key": "projectName",
-							"value": "Social Analysis 2025"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Add Project Manager",
+			"name": "Create Project",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"employeeId\": 101,\n  \"firstName\": \"Alice\",\n  \"lastName\": \"Johnson\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": "{\"projectName\": \"MyProject\", \"projectManagerEmployeeId\": 1, \"instituteName\": \"SMU\", \"startDate\": \"2024-01-01\", \"endDate\": \"2024-12-31\"}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/project-managers",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"project-managers"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Add Project",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"projectName\": \"Social Analysis 2025\",\n  \"projectManagerEmployeeId\": 101,\n  \"instituteName\": \"SMU AI Lab\",\n  \"startDate\": \"2025-05-01\",\n  \"endDate\": \"2025-08-30\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/projects",
-					"protocol": "http",
+					"raw": "localhost:8080/api/projects",
 					"host": [
 						"localhost"
 					],
@@ -305,22 +117,21 @@
 			"response": []
 		},
 		{
-			"name": "Add Posts To Project",
+			"name": "Link Posts to Project",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"projectName\": \"Social Analysis 2025\",\n  \"posts\": [\n    {\n      \"postId\": 1,\n      \"socialMedia\": \"Twitter\",\n      \"username\": \"john_doe\",\n      \"text\": \"Excited about this project!\",\n      \"location\": \"Dallas, TX\",\n      \"time\": \"2025-04-29T15:00:00\",\n      \"numberOfLikes\": 100,\n      \"containsMultimedia\": true\n    },\n    {\n      \"postId\": 2,\n      \"socialMedia\": \"Instagram\",\n      \"username\": \"jane_doe\",\n      \"text\": \"Launching today 🚀\",\n      \"location\": \"New York, NY\",\n      \"time\": \"2025-04-29T18:45:00\",\n      \"numberOfLikes\": 250,\n      \"containsMultimedia\": false\n    }\n  ]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": "{\n  \"projectName\": \"MyProject\",\n  \"postIds\": [\n    {\n      \"username\": \"johndoe\",\n      \"time\": \"2024-12-01T14:30:00\",\n      \"socialMedia\": \"Twitter\"\n    }\n  ],\n  \"categoryName\": \"Sentiment\",\n  \"categoryResult\": \"Positive\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/projects/add-posts",
-					"protocol": "http",
+					"raw": "localhost:8080/api/projects/add-posts",
 					"host": [
 						"localhost"
 					],
@@ -335,22 +146,232 @@
 			"response": []
 		},
 		{
+			"name": "Get Analysis Results by Project Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/projects/analysis-results?projectName=MyProject",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"projects",
+						"analysis-results"
+					],
+					"query": [
+						{
+							"key": "projectName",
+							"value": "MyProject"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Project Analysis Summary",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/projects/MyProject/analysis-summary",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"projects",
+						"MyProject",
+						"analysis-summary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Posts by Social Media",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/posts/by-social-media/Twitter",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posts",
+						"by-social-media",
+						"Twitter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Posts Between Times",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/posts/between?start=2024-01-01T00:00:00&end=2024-12-31T23:59:59",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posts",
+						"between"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2024-01-01T00:00:00"
+						},
+						{
+							"key": "end",
+							"value": "2024-12-31T23:59:59"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Posts by User and Media",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/posts/by-user-and-media?username=johndoe&media=Twitter",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posts",
+						"by-user-and-media"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "johndoe"
+						},
+						{
+							"key": "media",
+							"value": "Twitter"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Posts by Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/posts/by-name?name=John",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posts",
+						"by-name"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "John"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\": \"johndoe\", \"socialMedia\": \"Twitter\", \"time\": \"2024-05-01T12:00:00\", \"text\": \"This is a post\", \"location\": \"Dallas\", \"numberOfLikes\": 10, \"numberOfDislikes\": 0, \"containsMultimedia\": true}"
+				},
+				"url": {
+					"raw": "localhost:8080/api/posts",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Project Summary by Posts",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"posts\": [{\"username\": \"johndoe\", \"time\": \"2024-05-01T12:00:00\", \"socialMedia\": \"Twitter\"}]}"
+				},
+				"url": {
+					"raw": "localhost:8080/api/posts/project-summary-by-posts",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"posts",
+						"project-summary-by-posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Add Analysis Result",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"postId\": 18,\n  \"projectName\": \"Health Data Insights\",\n  \"categoryName\": \"Sentiment\",\n  \"categoryResult\": \"Positive\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": "{\"username\": \"johndoe\", \"socialMedia\": \"Twitter\", \"time\": \"2024-05-01T12:00:00\", \"projectName\": \"MyProject\", \"categoryName\": \"Sentiment\", \"categoryResult\": \"Positive\"}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/analysis/add",
-					"protocol": "http",
+					"raw": "localhost:8080/api/analysis/add",
 					"host": [
 						"localhost"
 					],
@@ -359,64 +380,6 @@
 						"api",
 						"analysis",
 						"add"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create User",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"username\": \"johndoe\",\n  \"socialMedia\": \"Facebook\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Dowson\",\n  \"countryOfBirth\": \"USA\",\n  \"countryOfResidence\": \"USA\",\n  \"age\": 30,\n  \"gender\": \"Male\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create User Copy",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"postId\": 101,\n  \"username\": \"johndoe\",\n  \"socialMedia\": \"Twitter\",\n  \"time\": \"2025-05-06T15:30:00\",\n  \"text\": \"Hello!\",\n  \"location\": \"Dallas, TX\",\n  \"numberOfLikes\": 25,\n  \"numberOfDislikes\": 2,\n  \"containsMultimedia\": true\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/posts",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posts"
 					]
 				}
 			},
